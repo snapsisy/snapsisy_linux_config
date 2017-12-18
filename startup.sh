@@ -66,9 +66,12 @@ function download_dot_files() {
 	mv ~/.emacs ~/.meacs.bak
 	echo "no content" >> .tmux.conf.local
 	mv ~/.tmux.conf.local ~/.tmux.conf.local.bak
+	echo "no content" >> .zshrc
+	mv ~/.zshrc ~/.zshrc.bak
 	cp ~/snapsisy_dot_files/vim/.vimrc ~/.vimrc
 	cp ~/snapsisy_dot_files/emacs/.emacs ~/.emacs
 	cp ~/snapsisy_dot_files/tmux/.tmux.conf.local ~/.tmux.conf.local
+	cp ~/snapsisy_dot_files/zsh/.zshrc ~/.zshrc
 	rm -rf snapsisy_dot_files
 }
 
