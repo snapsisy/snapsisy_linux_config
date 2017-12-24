@@ -1,0 +1,5 @@
+#!/bin/bash
+
+## edit the content of Layers to expand layers to use
+Layers=(cmdline-tools)
+export Layers

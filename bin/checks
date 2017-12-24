@@ -1,0 +1,27 @@
+#!/bin/bash
+
+check_root_status() {
+	if [[ `whoami` == "root" ]]; then
+		in_root=true
+	else
+		echo "you are running in root mode, please rerun in non-root mode"
+		exit 85
+	fi
+	export in_root
+}
+
+check_system_codename() {
+	. /etc/os-release
+	export $VERSION_CODENAME
+}
+
+distrubuted_check() {
+	. ./layers
+	for layers in $Layer; do
+		. ../layers/$layer/checks.sh
+	done
+}
+
+check_root_status
+check_system_codename
+distrubuted_check

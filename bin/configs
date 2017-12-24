@@ -1,0 +1,11 @@
+#!/bin/bash
+## this file generates come variables for later use
+
+distributed_config() {
+	. ./layers
+	for layer in $Layer; do
+		. ./layers/$layer/configs.sh
+	done
+}
+
+distributed_config

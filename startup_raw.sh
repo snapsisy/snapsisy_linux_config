@@ -4,20 +4,6 @@
 # output error in the program excution
 set -e
 
-# get ubuntu code name
-code_name=$(lsb_release -cs)
-
-# check if running in root
-function check_root () {
-	if [[ $(whoami) == "root" ]]; then
-		return 1
-	else
-		return 0
-	fi
-}
-in_root=$(check_root)
-
-# modify the mirror source, choose ustc mirror
 # make sure the ubuntu proposed repo is invoked
 function setup_source() {
 	if [[ $in_root ]]; then
