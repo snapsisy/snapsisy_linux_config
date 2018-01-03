@@ -1,4 +1,4 @@
-# snapsisy_linux_config
+# snapsisy linux config
 #### this script helps you to setup envs that you will be needing in your development
 #### you're welcome to join me
 

@@ -1,0 +1,35 @@
+#!/bin/bash
+
+## import envs
+. ./layers.slc
+
+
+checks() {
+	. ./checks
+}
+
+configs() {
+	echo the following layers:
+	echo $Layers
+	echo will be configured
+	read -p "do you wanna continue? (y/N)  " YES_NO
+	if [[ $YES_NO == 'y' || $YES_NO == 'Y' ]]; then
+		. ./configs
+	fi
+}
+
+install() {
+	checks
+	configs
+	for layer in $Layers; do
+		. ./layers/$layer/install.sh
+	done
+}
+
+if [[ $1 == 'check' ]]; then
+	checks
+elif [[ $1 == 'config' ]]; then
+	configs
+else
+	install
+fi

@@ -1,5 +1,6 @@
 #!/bin/bash
-
+## set -x
+. ./layers.slc
 check_root_status() {
 	if [[ `whoami` == "root" ]]; then
 		echo "you are running in root mode, please rerun in non-root mode"
@@ -8,6 +9,7 @@ check_root_status() {
 }
 
 check_system_codename() {
+	##
 	if [[ -f /etc/os-release ]]; then
 		. /etc/os-release
 		if [[ $ID == "debian" && $VERSION_ID == "8" ]]; then
@@ -17,27 +19,23 @@ check_system_codename() {
 		else
 			export VERSION_CODENAME
 		fi
+	##
 	elif type lsb_release >/dev/null 2>&1; then
 		VERSION_CODENAME=`lsb_release -cs`
 		export VERSION_CODENAME
+	##
 	elif [[ -f /etc/lsb-release ]]; then
 		. /etc/lsb-release
 		VERSION_CODENAME=$DISTRIB_CODENAME
 		export VERSION_CODENAME
-	elif [[ -f /etc/debian_version ]]; then
-		debian_version_number=`cat /etc/debian_version`
-		if [[ debian_version_number < 9 && debian_version_number > 8 ]]; then
-			VERSION_CODENAME=jessie
-		elif [[ debian_version_number >= 9 ]]; then
-			VERSION_CODENAME=stretch
-		fi
 	fi
 }
 
 distrubuted_check() {
-	. ./layers
-	for layers in $Layer; do
-		. ../layers/$layer/checks.sh
+	for layer in $Layers; do
+		echo checking 
+		echo $layer
+		. ./layers/$layer/check.sh;
 	done
 }
 
