@@ -4,27 +4,6 @@
 # output error in the program excution
 set -e
 
-# make sure the ubuntu proposed repo is invoked
-function setup_source() {
-	if [[ $in_root ]]; then
-		sed -i 's/archive.ubuntu.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
-		sed -i 's/security.ubuntu.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
-		echo "deb http://mirrors.ustc.edu.cn/ubuntu ${code_name}-proposed main restricted universe multiverse" >> /etc/apt/sources.list
-	else
-		sudo sed -i 's/archive.ubuntu.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
-		sudo sed -i 's/security.ubuntu.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
-		sudo sh -c "echo 'deb http://mirrors.ustc.edu.cn/ubuntu ${code_name}-proposed main restricted universe multiverse' >> /etc/apt/sources.list"
-	fi
-}
-
-# install the needed packages for my development
-function install_package() {
-	if [[ $in_root ]]; then
-		apt -y update && apt -y full-upgrade && apt -y install vim-nox emacs git curl wget axel aria2 python-all-dev python3-all-dev python-dev python3-dev python-pip python3-pip python-setuptools python3-setuptools libncursesw5-dev libncurses5-dev libsqlite3-dev libbz2-dev libzip-dev libreadline-dev make build-essential libssl-dev zlib1g-dev llvm xz-utils tk-dev clang cmake cmake-curses-gui shadowsocks zsh tmux
-	else
-		sudo apt -y update && sudo apt -y full-upgrade && sudo apt -y install vim-nox emacs-nox git curl wget axel aria2 python-all-dev python3-all-dev python-dev python3-dev python-pip python3-pip python-setuptools python3-setuptools libncursesw5-dev libncurses5-dev libsqlite3-dev libbz2-dev libzip-dev libreadline-dev make build-essential libssl-dev zlib1g-dev llvm xz-utils tk-dev clang cmake cmake-curses-gui shadowsocks zsh tmux
-	fi
-}
 
 # set proxy variables for command line use
 function proxy_on() {
@@ -89,8 +68,6 @@ function setup_vim() {
 	proxy_off
 }
 
-setup_source
-install_package
 setup_ohmyzsh
 get_dotfiles
 setup_tmux

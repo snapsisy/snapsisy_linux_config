@@ -1,34 +1,112 @@
 #!/bin/bash
-
-## import envs
+## set -x
+## import layers
 . ./layers.slc
 
-
-checks() {
-	. ./checks
+## do some check works
+#################################################################
+#################################################################
+check_root_status() {
+	if [[ `whoami` == "root" ]]; then
+		echo "you are running in root mode, please rerun in non-root mode"
+		exit 85
+	fi
 }
+check_distro() {
+	if [[ -f /etc/os-release ]]; then
+		. /etc/os-release
+		if [[ $ID == "debian" && $VERSION_ID == "8" ]]; then
+			VERSION_CODENAME=jessie
+		elif [[ $ID == "debian" && $VERSION_ID == "9" ]]; then
+			VERSION_CODENAME=stretch
+		fi
+		export ID
+		export VERSION_CODENAME
+	elif type lsb_release >/dev/null 2>&1; then
+		ID=`lsb_release -is`
+		VERSION_CODENAME=`lsb_release -cs`
+		export ID
+		export VERSION_CODENAME
+	fi
+}
+distrubuted_check() {
+	for layer in $Layers; do
+		echo checking 
+		echo $layer
+		source ./layers/$layer/check.sh;
+	done
+}
+#################################################################
+checks() {
+	check_root_status
+	check_distro
+	distrubuted_check
+}
+checks
+#################################################################
+#################################################################
+#################################################################
 
+## do some config works
+#################################################################
+#################################################################
+config_source_ubuntu() {
+	echo choose the suitable source
+	echo '0) azure 1) ustc'
+	echo default to no change
+	read SOURCE_NUMBER
+	if [[ $SOURCE_NUMBER == 0 ]]; then
+		sudo cp ./sources/ubuntu/azure/$VERSION_CODENAME /etc/apt/sources.list
+	elif [[ $SOURCE_NUMBER == 1 ]]; then
+		sudo cp ./sources/ubuntu/ustc/$VERSION_CODENAME /etc/apt/sources.list
+	fi
+	sudo apt update
+}
+config_source_Ubuntu() {
+	echo choose the suitable source
+	echo '0) azure 1) ustc'
+	echo default to no change
+	read SOURCE_NUMBER
+	if [[ $SOURCE_NUMBER == 0 ]]; then
+		sudo cp ./sources/ubuntu/azure/$VERSION_CODENAME /etc/apt/sources.list
+	elif [[ $SOURCE_NUMBER == 1 ]]; then
+		sudo cp ./sources/ubuntu/ustc/$VERSION_CODENAME /etc/apt/sources.list
+	fi
+	sudo apt update
+}
+distributed_config() {
+	for layer in $Layers; do
+		source ./layers/$layer/config.sh
+	done
+}
+#################################################################
 configs() {
+	echo ==========================================
 	echo the following layers:
 	echo $Layers
 	echo will be configured
+	echo ==========================================
 	read -p "do you wanna continue? (y/N)  " YES_NO
 	if [[ $YES_NO == 'y' || $YES_NO == 'Y' ]]; then
-		. ./configs
+		config_source_$ID
+		distributed_config
 	fi
 }
+configs
+#################################################################
+#################################################################
+#################################################################
 
 install() {
-	checks
-	configs
+	if [[ $ID == 'ubuntu' || $ID == 'Ubuntu' ]]; then
+		sudo apt-get -y update && sudo apt-get -y full-upgrade && sudo apt-get -y install vim-nox emacs-nox git curl wget axel aria2 python-all-dev python3-all-dev python-dev python3-dev python-pip python3-pip python-setuptools python3-setuptools libncurses5-dev libsqlite3-dev libbz2-dev libzip-dev libreadline-dev make build-essential libssl-dev zlib1g-dev llvm clang xz-utils tk-dev clang cmake cmake-curses-gui shadowsocks zsh tmux
+	fi
 	for layer in $Layers; do
 		. ./layers/$layer/install.sh
 	done
 }
 
-if [[ $1 == 'check' ]]; then
-	checks
-elif [[ $1 == 'config' ]]; then
+if [[ $1 == 'config' ]]; then
 	configs
 else
 	install
