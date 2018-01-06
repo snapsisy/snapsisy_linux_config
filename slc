@@ -53,41 +53,48 @@ checks
 #################################################################
 #################################################################
 gen_source() {
-	if [[ -f ./sources/ubuntu/self/$VERSION_CODENAME ]]
-		rm ./sources/ubuntu/self/$VERSION_CODENAME
-	fi
-	cp ./sources/template.ubuntu ./sources/ubuntu/self/$VERSION_CODENAME
-	echo =======================================================================================
-	echo "enter the source mirror for generation"
-	echo =======================================================================================
-	read source_mirror
-	sed -i "s/your.mirror/$source_mirror/g" ./sources/ubuntu/self/$VERSION_CODENAME
-	sed -i "s/codename/$VERSION_CODENAME/g" ./sources/ubuntu/self/$VERSION_CODENAME
+	case $ID in
+		ubuntu | Ubuntu)
+			if [[ -f ./sources/ubuntu/self/$VERSION_CODENAME ]]
+				rm ./sources/ubuntu/self/$VERSION_CODENAME
+			fi
+			cp ./sources/template.ubuntu ./sources/ubuntu/self/$VERSION_CODENAME
+			echo =======================================================================================
+			echo "enter the source mirror for generation"
+			echo =======================================================================================
+			read source_mirror
+			sed -i "s/your.mirror/$source_mirror/g" ./sources/ubuntu/self/$VERSION_CODENAME
+			sed -i "s/codename/$VERSION_CODENAME/g" ./sources/ubuntu/self/$VERSION_CODENAME
+			;;
+	esac
 }
 source_config() {
-	echo =======================================================================================
-	echo do you wanna generate a source file to use?  (y/N)
-	echo =======================================================================================
-	read gen_will
-	if [[ $gen_will == 'y' || $gen_will == "Y" ]]; then
-		gen_source
-	fi
-	echo "choose the suitable source"
-	echo "0) self 1) azure 2) ustc"
-	echo "default to no change"
-	read SOURCE_NUMBER
-	if [[ $SOURCE_NUMBER == 0 ]]; then
-		if [[ -f ./sources/self/$VERSION_NAME ]]; then
-			sudo cp ./sources/ubuntu/self/$VERSION_CODENAME /etc/apt/sources.list
-		else
-			echo "you didn't generate any source"
-		fi
-	elif [[ $SOURCE_NUMBER == 1 ]]; then
-		sudo cp ./sources/ubuntu/azure/$VERSION_CODENAME /etc/apt/sources.list
-	elif [[ $SOURCE_NUMBER == 2 ]]; then
-		sudo cp ./sources/ubuntu/ustc/$VERSION_CODENAME /etc/apt/sources.list
-	fi
-	sudo apt update
+	case $ID in
+		ubuntu | Ubuntu)
+			echo =======================================================================================
+			echo do you wanna generate a source file to use?  (y/N)
+			echo =======================================================================================
+			read gen_will
+			if [[ $gen_will == 'y' || $gen_will == "Y" ]]; then
+				gen_source
+			fi
+			echo "choose the suitable source"
+			echo "0) self 1) azure 2) ustc"
+			echo "default to no change"
+			read SOURCE_NUMBER
+			if [[ $SOURCE_NUMBER == 0 ]]; then
+				if [[ -f ./sources/self/$VERSION_NAME ]]; then
+					sudo cp ./sources/ubuntu/self/$VERSION_CODENAME /etc/apt/sources.list
+				else
+					echo "you didn't generate any source"
+				fi
+			elif [[ $SOURCE_NUMBER == 1 ]]; then
+				sudo cp ./sources/ubuntu/azure/$VERSION_CODENAME /etc/apt/sources.list
+			elif [[ $SOURCE_NUMBER == 2 ]]; then
+				sudo cp ./sources/ubuntu/ustc/$VERSION_CODENAME /etc/apt/sources.list
+			fi
+			;;
+	esac
 }
 distributed_config() {
 	for layer in $Layers; do
