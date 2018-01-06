@@ -1,12 +1,18 @@
 #!/bin/bash
 
+echo =========================================================================================
 echo "you will need to install powerline fonts "
 echo "and set it default in your favorite terminal"
 echo "my recommedation is the Iosevka font"
+echo "press enter to continue"
+echo =========================================================================================
+read
 
 config_ycm() {
+	echo =========================================================================================
 	echo what do you wanna use vim for?
 	echo python is included by default
+	echo =========================================================================================
 	read -p "c/c++? (y/N) " config_ycm0
 	read -p "go? (y/N) " config_ycm1
 	read -p "typescript? (y/N) " config_ycm2
@@ -15,16 +21,27 @@ config_ycm() {
 }
 
 config_zsh() {
-	echo choose one theme, none for default
+	echo =========================================================================================
+	echo press enter and then choose from the listed themes, none for default
+	echo =========================================================================================
+	read
 	if [[ -d ~/.oh-my-zsh/themes ]]; then
 		THEMES=`ls ~/.oh-my-zsh/themes`
 	fi
 	count=0
 	for theme in $THEMES; do
-		echo "$count) $theme"
+		count_4=`expr $count % 3`
+		if [[ $count_4 != 0 ]]; then
+			echo -n "$count) $theme "
+		else
+			echo "$count) $theme "
+		fi
 		count=$((count+1))
 	done
-	read -p "your choice" choice
+	echo
+	echo =========================================================================================
+	echo "your choice"
+	read choice
 	count=0
 	for theme in $THEMES; do
 		split="$(cut -d'.' -f1 <<<"$theme")"
@@ -34,4 +51,4 @@ config_zsh() {
 		count=$((count+1))
 	done
 	export CHOSEN_THEME
-}		
+}

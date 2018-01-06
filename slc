@@ -1,5 +1,8 @@
 #!/bin/bash
+## uncomment set -x and set -e to debug
 ## set -x
+## set -e
+
 ## import layers
 . ./layers.slc
 
@@ -31,8 +34,7 @@ check_distro() {
 }
 distrubuted_check() {
 	for layer in $Layers; do
-		echo checking 
-		echo $layer
+		echo "checking layer $layer"
 		source ./layers/$layer/check.sh;
 	done
 }
@@ -50,26 +52,39 @@ checks
 ## do some config works
 #################################################################
 #################################################################
-config_source_ubuntu() {
-	echo choose the suitable source
-	echo '0) azure 1) ustc'
-	echo default to no change
-	read SOURCE_NUMBER
-	if [[ $SOURCE_NUMBER == 0 ]]; then
-		sudo cp ./sources/ubuntu/azure/$VERSION_CODENAME /etc/apt/sources.list
-	elif [[ $SOURCE_NUMBER == 1 ]]; then
-		sudo cp ./sources/ubuntu/ustc/$VERSION_CODENAME /etc/apt/sources.list
+gen_source() {
+	if [[ -f ./sources/ubuntu/self/$VERSION_CODENAME ]]
+		rm ./sources/ubuntu/self/$VERSION_CODENAME
 	fi
-	sudo apt update
+	cp ./sources/template.ubuntu ./sources/ubuntu/self/$VERSION_CODENAME
+	echo =======================================================================================
+	echo "enter the source mirror for generation"
+	echo =======================================================================================
+	read source_mirror
+	sed -i "s/your.mirror/$source_mirror/g" ./sources/ubuntu/self/$VERSION_CODENAME
+	sed -i "s/codename/$VERSION_CODENAME/g" ./sources/ubuntu/self/$VERSION_CODENAME
 }
-config_source_Ubuntu() {
-	echo choose the suitable source
-	echo '0) azure 1) ustc'
-	echo default to no change
+source_config() {
+	echo =======================================================================================
+	echo do you wanna generate a source file to use?  (y/N)
+	echo =======================================================================================
+	read gen_will
+	if [[ $gen_will == 'y' || $gen_will == "Y" ]]; then
+		gen_source
+	fi
+	echo "choose the suitable source"
+	echo "0) self 1) azure 2) ustc"
+	echo "default to no change"
 	read SOURCE_NUMBER
 	if [[ $SOURCE_NUMBER == 0 ]]; then
-		sudo cp ./sources/ubuntu/azure/$VERSION_CODENAME /etc/apt/sources.list
+		if [[ -f ./sources/self/$VERSION_NAME ]]; then
+			sudo cp ./sources/ubuntu/self/$VERSION_CODENAME /etc/apt/sources.list
+		else
+			echo "you didn't generate any source"
+		fi
 	elif [[ $SOURCE_NUMBER == 1 ]]; then
+		sudo cp ./sources/ubuntu/azure/$VERSION_CODENAME /etc/apt/sources.list
+	elif [[ $SOURCE_NUMBER == 2 ]]; then
 		sudo cp ./sources/ubuntu/ustc/$VERSION_CODENAME /etc/apt/sources.list
 	fi
 	sudo apt update
@@ -81,14 +96,14 @@ distributed_config() {
 }
 #################################################################
 configs() {
-	echo ==========================================
+	source_config
+	echo =======================================================================================
 	echo the following layers:
 	echo $Layers
 	echo will be configured
-	echo ==========================================
+	echo =======================================================================================
 	read -p "do you wanna continue? (y/N)  " YES_NO
 	if [[ $YES_NO == 'y' || $YES_NO == 'Y' ]]; then
-		config_source_$ID
 		distributed_config
 	fi
 }
