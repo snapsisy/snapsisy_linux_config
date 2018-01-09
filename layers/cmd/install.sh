@@ -89,7 +89,13 @@ install_vim() {
 	fi
 }
 
+install_tmux() {
+	cd ~ && curl -fLo ~/.tmux/airline-dracula.tmux --create-dirs https://raw.githubusercontent.com/sei40kr/tmux-airline-dracula/master/airline-dracula.tmux
+	echo "run-shell '. ~/.tmux/airline-dracula.tmux'" > ~/.tmux.conf
+}
+
 install_zsh
 install_vim
+install_tmux
 
 chsh -s /bin/bash

@@ -21,10 +21,4 @@ fi
 if [[ -f ~/.tmux.conf ]]; then
 	mv ~/.tmux.conf ~/.tmux.conf.bak
 fi
-if [[ -f ~/.tmux.conf.local ]]; then
-	rm ~/.tmux.conf.local
-fi
-if [[ -d ~/.tmux ]]; then
-	rm -rf ~/.tmux
-fi
 ######################################################
