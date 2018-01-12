@@ -4,7 +4,7 @@
 ## set -e
 
 ## import layers
-. ./layers.slc
+source ./layers.slc
 
 ## do some check works
 #################################################################
@@ -17,7 +17,7 @@ check_root_status() {
 }
 check_distro() {
 	if [[ -f /etc/os-release ]]; then
-		. /etc/os-release
+		source /etc/os-release
 		if [[ $ID == "debian" && $VERSION_ID == "8" ]]; then
 			VERSION_CODENAME=jessie
 		elif [[ $ID == "debian" && $VERSION_ID == "9" ]]; then
@@ -124,7 +124,7 @@ install() {
 		sudo apt-get -y update && sudo apt-get -y full-upgrade && sudo apt-get -y install vim-nox emacs-nox git curl wget axel aria2 python-all-dev python3-all-dev python-dev python3-dev python-pip python3-pip python-setuptools python3-setuptools libncurses5-dev libsqlite3-dev libbz2-dev libzip-dev libreadline-dev make build-essential libssl-dev zlib1g-dev llvm clang xz-utils tk-dev clang cmake cmake-curses-gui shadowsocks zsh tmux
 	fi
 	for layer in $Layers; do
-		. ./layers/$layer/install.sh
+		source ./layers/$layer/install.sh
 	done
 }
 
