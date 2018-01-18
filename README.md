@@ -2,7 +2,7 @@
 #### this script helps you to setup envs that you will be needing in your development
 #### you're welcome to join me
 
-run ./slc.sh to start
+run ./slc to start
 
 linux system already included are
 1. ubuntu
@@ -14,4 +14,4 @@ linux system to be included are
 4. archlinux
 5. as you will?
 
-maybe docker and vagrant suppport will be added later?
+maybe docker and vagrant suppport will be added later

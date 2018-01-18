@@ -26,6 +26,7 @@ Plug 'NLKNguyen/papercolor-theme'
 Plug 'jiangmiao/auto-pairs'
 Plug 'dracula/vim'
 Plug 'Shougo/unite.vim'
+Plug 'artur-shaik/vim-javacomplete2'
 call plug#end()
 
 set t_Co=256
@@ -60,3 +61,9 @@ let g:unite_source_grep_default_opts =
             \ '''.hg'' --ignore ''.svn'' --ignore' .
             \ ' ''.git'' --ignore ''.bzr'''
 let g:unite_source_grep_recursive_opt = ''
+
+autocmd FileType java setlocal omnifunc=javacomplete#Complete
+nmap <F4> <Plug>(JavaComplete-Imports-AddSmart)
+nmap <F5> <Plug>(JavaComplete-Imports-Add)
+nmap <F6> <Plug>(JavaComplete-Imports-AddMissing)
+nmap <F7> <Plug>(JavaComplete-Imports-RemoveUnused)
