@@ -55,13 +55,14 @@ checks
 gen_source() {
 	case $ID in
 		ubuntu | Ubuntu)
-			if [[ -f ./sources/ubuntu/self/$VERSION_CODENAME ]]
+			if [[ -f ./sources/ubuntu/self/$VERSION_CODENAME ]]; then
 				rm ./sources/ubuntu/self/$VERSION_CODENAME
 			fi
+			mkdir -p ./sources/ubuntu/self
 			cp ./sources/template.ubuntu ./sources/ubuntu/self/$VERSION_CODENAME
-			echo =======================================================================================
+			echo ===========================================================
 			echo "enter the source mirror for generation"
-			echo =======================================================================================
+			echo ===========================================================
 			read source_mirror
 			sed -i "s/your.mirror/$source_mirror/g" ./sources/ubuntu/self/$VERSION_CODENAME
 			sed -i "s/codename/$VERSION_CODENAME/g" ./sources/ubuntu/self/$VERSION_CODENAME
@@ -71,10 +72,9 @@ gen_source() {
 source_config() {
 	case $ID in
 		ubuntu | Ubuntu)
-			echo =======================================================================================
-			echo do you wanna generate a source file to use?  (y/N)
-			echo =======================================================================================
-			read gen_will
+			echo ===========================================================
+			read -p "do you wanna generate a source file to use?  (y/N)  " gen_will
+			echo ===========================================================
 			if [[ $gen_will == 'y' || $gen_will == "Y" ]]; then
 				gen_source
 			fi
@@ -104,11 +104,11 @@ distributed_config() {
 #################################################################
 configs() {
 	source_config
-	echo =======================================================================================
+	echo ===================================================================
 	echo the following layers:
 	echo $Layers
 	echo will be configured
-	echo =======================================================================================
+	echo ===================================================================
 	read -p "do you wanna continue? (y/N)  " YES_NO
 	if [[ $YES_NO == 'y' || $YES_NO == 'Y' ]]; then
 		distributed_config
