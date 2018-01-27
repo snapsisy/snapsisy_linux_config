@@ -18,8 +18,12 @@ config_ycm() {
 	read -p "typescript? (y/N) " config_ycm2
 	read -p "javascript? (y/N) " config_ycm3
 	read -p "rust? (y/N) " config_ycm4
+	export config_ycm0
+	export config_ycm1
+	export config_ycm2
+	export config_ycm3
+	export config_ycm4
 }
-
 config_zsh() {
 	echo =========================================================================================
 	echo press enter and then choose from the listed themes, none for default

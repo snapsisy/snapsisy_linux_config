@@ -43,36 +43,36 @@ install_rust_workflow() {
 
 install_ycm() {
 	config_ycm
-	if [[ config_ycm0 == 'y' || config_ycm0 == 'Y' ]]; then
-		$CLANG=--clang-completer
+	if [[ $config_ycm0 == 'y' || $config_ycm0 == 'Y' ]]; then
+		CLANG=--clang-completer
 	fi
-	if [[ config_ycm1 == 'y' || config_ycm1 == 'Y' ]]; then
+	if [[ $config_ycm1 == 'y' || $config_ycm1 == 'Y' ]]; then
 		if type go >/dev/null 2>&1; then
-			$GOLANG=--go-completer
+			GOLANG=--go-completer
 		else
 			install_golang_workflow
-			$GOLANG=--go-completer
+			GOLANG=--go-completer
 		fi
 	fi
-	if [[ config_ycm2 == 'y' || config_ycm2 == 'Y' ]]; then
+	if [[ $config_ycm2 == 'y' || $config_ycm2 == 'Y' ]]; then
 		if type npm >/dev/null 2>&1; then
 			npm install -g typescript
 		else
 			install_node_workflow && npm install -g typescript
 		fi
 	fi
-	if [[ config_ycm3 == 'y' || config_ycm3 == 'Y' ]]; then
+	if [[ $config_ycm3 == 'y' || $config_ycm3 == 'Y' ]]; then
 		if type npm >/dev/null 2>&1; then
-			$JAVASCRIPT=--js-completer
+			JAVASCRIPT=--js-completer
 		else
-			install_node_workflow && $JAVASCRIPT=--js-completer
+			install_node_workflow && JAVASCRIPT=--js-completer
 		fi
 	fi
-	if [[ config_ycm4 == 'y' || config_ycm4 == 'Y' ]]; then
+	if [[ $config_ycm4 == 'y' || $config_ycm4 == 'Y' ]]; then
 		if type rustc >/dev/null 2>&1; then
-			$RUST=--rust-completer
+			RUST=--rust-completer
 		else
-			install_rust_workflow && $RUST=--rust-completer
+			install_rust_workflow && RUST=--rust-completer
 		fi
 	fi
 	cd ~/.vim/plugged/YouCompleteMe && ./install.py $CLANG $CSHARP $GOLANG $JAVASCRIPT $RUST

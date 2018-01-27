@@ -104,6 +104,7 @@ distributed_config() {
 		source ./layers/$layer/config.sh
 	done
 }
+
 #################################################################
 configs() {
 	source_config
@@ -127,7 +128,7 @@ install() {
 		sudo apt-get -y update && sudo apt-get -y full-upgrade && sudo apt-get -y install vim-nox emacs-nox git curl wget axel aria2 python-all-dev python3-all-dev python-dev python3-dev python-pip python3-pip python-setuptools python3-setuptools libncurses5-dev libsqlite3-dev libbz2-dev libzip-dev libreadline-dev make build-essential libssl-dev zlib1g-dev llvm clang xz-utils tk-dev clang cmake cmake-curses-gui shadowsocks zsh tmux
 	fi
 	for layer in $Layers; do
-		source ./layers/$layer/install.sh
+		. ./layers/$layer/install.sh
 	done
 }
 
