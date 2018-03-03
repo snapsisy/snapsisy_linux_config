@@ -1,0 +1,5 @@
+deb http://mirrors.ustc.edu.cn/ubuntu/ artful main restricted universe multiverse
+deb http://mirrors.ustc.edu.cn/ubuntu/ artful-updates main restricted universe multiverse
+deb http://mirrors.ustc.edu.cn/ubuntu/ artful-backports main restricted universe multiverse
+deb http://mirrors.ustc.edu.cn/ubuntu/ artful-proposed main restricted universe multiverse
+deb http://mirrors.ustc.edu.cn/ubuntu/ artful-security main restricted universe multiverse
