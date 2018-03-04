@@ -42,7 +42,6 @@ install_rust_workflow() {
 }
 
 install_ycm() {
-	source config.sh
 	config_ycm
 	if [[ $config_ycm0 == 'y' || $config_ycm0 == 'Y' ]]; then
 		CLANG=--clang-completer
