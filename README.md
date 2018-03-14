@@ -4,6 +4,7 @@
 
 Make sure you have git installed. Using this tool is as easy as running the following commands:
 > cd ~ && git clone https://github.com/snapsisy/snapsisy_linux_config.git
+
 > cd snapsisy_linux_config && ./slc
 
 ### For different distros
