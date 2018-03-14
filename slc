@@ -131,9 +131,3 @@ install() {
 		. ./layers/$layer/install.sh
 	done
 }
-
-if [[ $1 == 'config' ]]; then
-	configs
-else
-	install
-fi

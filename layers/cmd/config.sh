@@ -13,16 +13,18 @@ config_ycm() {
 	echo what do you wanna use vim for?
 	echo python is included by default
 	echo =========================================================================================
-	read -p "c/c++? (y/N) " config_ycm0
-	read -p "go? (y/N) " config_ycm1
-	read -p "typescript? (y/N) " config_ycm2
-	read -p "javascript? (y/N) " config_ycm3
-	read -p "rust? (y/N) " config_ycm4
-	export config_ycm0
-	export config_ycm1
-	export config_ycm2
-	export config_ycm3
-	export config_ycm4
+	read -p "c/c++? (y/N) " config_ycm_cocpp
+	read -p "python?(y/N)" config_ycm_python
+	read -p "go? (y/N) " config_ycm_go
+	read -p "typescript? (y/N) " config_ycm_ts
+	read -p "javascript? (y/N) " config_ycm_js
+	read -p "rust? (y/N) " config_ycm_rust
+	export config_ycm_cocpp
+	export config_ycm_python
+	export config_ycm_go
+	export config_ycm_ts
+	export config_ycm_js
+	export config_ycm_rust
 }
 config_zsh() {
 	echo =========================================================================================
@@ -46,13 +48,17 @@ config_zsh() {
 	echo =========================================================================================
 	echo "your choice"
 	read choice
-	count=0
-	for theme in $THEMES; do
-		split="$(cut -d'.' -f1 <<<"$theme")"
-		if [[ $count == $choice ]]; then
-			CHOSEN_THEME=$split
-		fi
-		count=$((count+1))
-	done
+	if [[ choice > 0 && choice < count ]]; then
+		count=0
+		for theme in $THEMES; do
+			split="$(cut -d'.' -f1 <<<"$theme")"
+			if [[ $count == $choice ]]; then
+				CHOSEN_THEME=$split
+			fi
+			count=$((count+1))
+		done
+	else
+		CHOSEN_THEME=ys
+	fi
 	export CHOSEN_THEME
 }
