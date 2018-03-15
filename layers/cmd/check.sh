@@ -21,4 +21,7 @@ fi
 if [[ -f ~/.tmux.conf ]]; then
 	mv ~/.tmux.conf ~/.tmux.conf.bak
 fi
+if [[ -d ~/.tmux ]]; then
+	mv ~/.tmux ~/.tmux.bak
+fi
 ######################################################
