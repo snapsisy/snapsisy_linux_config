@@ -1,7 +1,7 @@
 #!/bin/bash
 ## uncomment set -x and set -e to debug
-## set -x
-## set -e
+set -x
+set -e
 
 ## import layers
 source ./layers.slc
@@ -25,14 +25,16 @@ check_distro() {
 			VERSION_CODENAME=jessie
 		elif [[ $ID == "debian" && $VERSION_ID == "9" ]]; then
 			VERSION_CODENAME=stretch
+		elif [[ $ID == "ubuntu" && $VERSION_ID == "14.04" ]]; then
+			VERSION_CODENAME=trusty
 		fi
-		export ID
-		export VERSION_CODENAME
+		export $ID
+		export $VERSION_CODENAME
 	elif type lsb_release >/dev/null 2>&1; then
 		ID=`lsb_release -is`
 		VERSION_CODENAME=`lsb_release -cs`
-		export ID
-		export VERSION_CODENAME
+		export $ID
+		export $VERSION_CODENAME
 	fi
 }
 distrubuted_check() {
@@ -86,8 +88,8 @@ source_config() {
 			echo "default to no change"
 			read SOURCE_NUMBER
 			if [[ $SOURCE_NUMBER == 0 ]]; then
-				if [[ -f ./sources/self/$VERSION_NAME ]]; then
-					sudo cp ./sources/ubuntu/self/$VERSION_CODENAME /etc/apt/sources.list
+				if [[ -f ./sources/ubuntu/self/$VERSION_CODENAME ]]; then
+						sudo cp ./sources/ubuntu/self/$VERSION_CODENAME /etc/apt/sources.list && echo yes
 				else
 					echo "you didn't generate any source"
 				fi
