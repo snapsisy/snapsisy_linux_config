@@ -1,0 +1,75 @@
+#!/bin/bash
+
+export ERROR=1
+
+check_is_root() {
+    if [[ `whoami` == "root" ]];then
+        echo 'you are running in root mode, please rerun in non-root mode'
+        exit $ERROR
+    fi
+}
+
+check_get_distro() {
+    if [[ -f /etc/os-release ]]; then
+        . /etc/os-release
+        if [[ $ID == "debian" ]]; then
+            if [[ $VERSION_ID == "7" ]]; then
+                VERSION_CODENAME=wheezy
+            elif [[ $VERSION_ID == "8" ]]; then
+                VERSION_CODENAME=jessie
+            elif [[ $VERSION_ID == "9" ]]; then
+                VERSION_CODENAME=stretch
+            fi
+        elif [[ $ID == "ubuntu" ]]; then
+            if [[ $VERSION_ID == "14.04" ]]; then
+                VERSION_CODENAME=trusty
+            elif [[ $VERSION_ID == "14.10" ]]; then
+                VERSION_CODENAME=utopic
+            elif [[ $VERSION_ID == "15.04" ]]; then
+                VERSION_CODENAME=vivid
+            elif [[ $VERSION_ID == "15.10" ]]; then
+                VERSION_CODENAME=wily
+            elif [[ $VERSION_ID == "16.04" ]]; then
+                VERSION_CODENAME=xenial
+            elif [[ $VERSION_ID == "16.10" ]]; then
+                VERSION_CODENAME=yakkety
+            elif [[ $VERSION_ID == "17.04" ]]; then
+                VERSION_CODENAME=zesty
+            elif [[ $VERSION_ID == "17.10" ]]; then
+                VERSION_CODENAME=artful
+            fi
+        else
+            echo 'your distro or your version is not supported yet...'
+            exit $ERROR
+        fi
+        export $ID
+        export $VERSION_CODENAME
+    fi
+}
+#!/bin/bash
+## vim
+if [[ -f ~/.vimrc ]]; then
+	mv ~/.vimrc ~/.vimrc.bak
+fi
+if [[ -d ~/.vim ]]; then
+	rm -rf ~/.vim
+fi
+######################################################
+
+## zsh
+if [[ -f ~/.zshrc ]]; then
+	mv ~/.zshrc ~/.zshrc.bak
+fi
+if [[ -d ~/.oh-my-zsh ]]; then
+	rm -rf ~/.oh-my-zsh
+fi
+######################################################
+
+## tmux
+if [[ -f ~/.tmux.conf ]]; then
+	mv ~/.tmux.conf ~/.tmux.conf.bak
+fi
+if [[ -d ~/.tmux ]]; then
+	mv ~/.tmux ~/.tmux.bak
+fi
+######################################################

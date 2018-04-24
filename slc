@@ -1,62 +1,25 @@
 #!/bin/bash
-## uncomment set -x and set -e to debug
 set -x
 set -e
 
-## import layers
-source ./layers.slc
-
 ## do some check works
-#################################################################
-#################################################################
-SLC_HOME=~/.slc
+export SLC_HOME=~/.slc
+## import layers
+. $SLC_HOME/init
 
-
-check_root_status() {
-	if [[ `whoami` == "root" ]]; then
-		echo "you are running in root mode, please rerun in non-root mode"
-		exit 85
-	fi
-}
-check_distro() {
-	if [[ -f /etc/os-release ]]; then
-		source /etc/os-release
-		if [[ $ID == "debian" && $VERSION_ID == "8" ]]; then
-			VERSION_CODENAME=jessie
-		elif [[ $ID == "debian" && $VERSION_ID == "9" ]]; then
-			VERSION_CODENAME=stretch
-		elif [[ $ID == "ubuntu" && $VERSION_ID == "14.04" ]]; then
-			VERSION_CODENAME=trusty
-		fi
-		export $ID
-		export $VERSION_CODENAME
-	elif type lsb_release >/dev/null 2>&1; then
-		ID=`lsb_release -is`
-		VERSION_CODENAME=`lsb_release -cs`
-		export $ID
-		export $VERSION_CODENAME
-	fi
-}
 distrubuted_check() {
 	for layer in $Layers; do
 		echo "checking layer $layer"
 		source ./layers/$layer/check.sh;
 	done
 }
-#################################################################
 checks() {
-	check_root_status
 	check_distro
 	distrubuted_check
 }
 checks
-#################################################################
-#################################################################
-#################################################################
 
 ## do some config works
-#################################################################
-#################################################################
 gen_source() {
 	case $ID in
 		ubuntu | Ubuntu)
@@ -107,7 +70,6 @@ distributed_config() {
 	done
 }
 
-#################################################################
 configs() {
 	source_config
 	echo ===================================================================
@@ -121,9 +83,6 @@ configs() {
 	fi
 }
 configs
-#################################################################
-#################################################################
-#################################################################
 
 install() {
 	if [[ $ID == 'ubuntu' || $ID == 'Ubuntu' ]]; then
